@@ -1,18 +1,18 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common'
-import { PrismaService } from 'src/prisma.service'
 import bcrypt from 'bcrypt'
-import { validationErrors } from '../utils/validations'
+import jwt from 'jsonwebtoken'
+import { PrismaService } from 'src/prisma.service'
+import { CreateUserDto, ExistingUsersDto, LoginUserDto } from 'src/dto/users.dto'
 
 @Injectable()
 export class UsersService {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  static async existingUser(email: string) {
-
+  async existingUser(email) {
     try {
-      const user = await this.prisma.users.findUnique({
+      const user = await this.prisma.user.findUnique({
         where: { email }
       })
 
@@ -22,31 +22,37 @@ export class UsersService {
     catch (error) {
       throw new Error(`Error checking user existence: ${error}`)
     }
+  }
+
+  async checkCredentials(req: LoginUserDto) {
+
+    const user = await this.prisma.user.findUnique({
+      where: { email: req.email }
+    })
+
+    if (!user) return false
+
+    const isPasswordValid = await bcrypt.compare(req.password, user.password)
+    return isPasswordValid
 
   }
 
-  static async register(name: string, email: string, password: string) {
+  async register(req: CreateUserDto) {
 
     try {
 
-      const validate = validationErrors(email, password)
-
-      if (Object.keys(validate).length > 0) {
-        return validate
-      }
-
-      const existingUser = await this.existingUser(email)
+      const existingUser = await this.existingUser({ email: req.email })
 
       if (existingUser) {
         throw new Error('User already exists')
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10)
+      const hashedPassword = await bcrypt.hash(req.password, 10)
 
-      const user = await this.prisma.users.create({
+      const user = await this.prisma.user.create({
         data: {
-          full_name: name,
-          email,
+          full_name: req.full_name,
+          email: req.email,
           password: hashedPassword
         }
       })
@@ -56,6 +62,32 @@ export class UsersService {
 
     catch (error) {
       throw new Error(`Error creating user: ${error}`)
+    }
+
+  }
+
+  async login(req: LoginUserDto) {
+
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { email: req.email }
+      })
+
+      if (!user) {
+        throw new Error('User not found')
+      }
+
+      const passwordMatch = await bcrypt.compare(req.password, user.password)
+
+      if (!passwordMatch) {
+        throw new Error('Invalid password')
+      }
+
+      return user
+    }
+
+    catch (error) {
+      throw new Error(`Error logging in: ${error}`)
     }
 
   }
