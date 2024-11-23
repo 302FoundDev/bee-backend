@@ -2,7 +2,7 @@
 import { Controller, Body, Post, Get, HttpException, HttpStatus, Query } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { CreateUserDto, LoginUserDto, GetUserDataDto } from 'src/dto/users.dto'
+import { CreateUserDto, LoginUserDto } from 'src/dto/users.dto'
 
 
 @Controller('users')
