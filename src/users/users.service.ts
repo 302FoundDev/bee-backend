@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common'
-import bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { PrismaService } from 'src/prisma.service'
 import { CreateUserDto, LoginUserDto } from 'src/dto/users.dto'
+import { User } from '@prisma/client'
 
 @Injectable()
 export class UsersService {
@@ -95,20 +96,22 @@ export class UsersService {
 
   }
 
-  async getUserData(email) {
-
+  async getUserData(email: string): Promise<User | null> {
     try {
       const user = await this.prisma.user.findUnique({
-        where: { email }
+        where: { email },
       })
 
+      if (!user) {
+        console.log('Usuario no encontrado')
+        throw new Error('User not found')
+      }
+
       return user
+    } catch (error) {
+      console.error(`Error obteniendo usuario: ${error.message}`)
+      throw new Error(`Error getting user: ${error.message}`)
     }
-
-    catch (error) {
-      throw new Error(`Error getting user: ${error}`)
-    }
-
   }
 
 }

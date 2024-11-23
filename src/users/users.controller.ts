@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Body, Post, Get, HttpException, HttpStatus } from '@nestjs/common'
+import { Controller, Body, Post, Get, HttpException, HttpStatus, Query } from '@nestjs/common'
 import { UsersService } from './users.service'
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CreateUserDto, LoginUserDto, GetUserDataDto } from 'src/dto/users.dto'
 
 
@@ -25,6 +25,7 @@ export class UsersController {
       return { status: 'success', message: 'User registered successfully', data: register }
     }
     catch (error) {
+      console.log(error, error.message)
       throw new HttpException({ status: 'error', message: error.message }, HttpStatus.UNAUTHORIZED)
     }
   }
@@ -50,15 +51,15 @@ export class UsersController {
 
   @Get('get-user-data')
   @ApiOperation({ summary: 'Get user data' })
-  @ApiBody({ type: GetUserDataDto })
+  @ApiQuery({ name: 'email', type: String })
   @ApiBearerAuth()
   @ApiResponse({ status: 400, description: 'Bad request. Please check your information.' })
   @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to access user data.' })
   @ApiResponse({ status: 404, description: 'Not found. User not found.' })
   @ApiResponse({ status: 200, description: 'User retrieved successfully. Response contains user data.' })
-  async getUserData(@Body() getUserData: GetUserDataDto) {
+  async getUserData(@Query('email') email: string) {
     try {
-      const userData = await this.userService.getUserData(getUserData)
+      const userData = await this.userService.getUserData(email)
 
       return { status: 'success', message: 'User data retrieved successfully', data: userData }
     }
