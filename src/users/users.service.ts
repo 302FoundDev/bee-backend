@@ -70,6 +70,8 @@ export class UsersService {
   async login(loginUserDto: LoginUserDto) {
 
     try {
+      const secret = process.env.JWT_SECRET_KEY!
+      
       const { email, password } = loginUserDto
 
       const checkCredentials = await this.checkCredentials(email, password)
@@ -89,6 +91,22 @@ export class UsersService {
 
     catch (error) {
       throw new Error(`Error logging in: ${error}`)
+    }
+
+  }
+
+  async getUserData(email) {
+
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { email }
+      })
+
+      return user
+    }
+
+    catch (error) {
+      throw new Error(`Error getting user: ${error}`)
     }
 
   }
