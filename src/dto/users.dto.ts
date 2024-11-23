@@ -3,61 +3,61 @@ import {  IsString, IsEmail, IsNotEmpty, IsOptional, IsNumber } from 'class-vali
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
-  full_name: string
+  readonly full_name: string
 
   @IsEmail()
   @IsNotEmpty()
-  email: string
+  readonly email: string
 
   @IsString()
   @IsNotEmpty()
-  password: string
+  readonly password: string
 }
 
 export class LoginUserDto {
   @IsEmail()
   @IsNotEmpty()
-  email: string
+  readonly email: string
 
   @IsString()
   @IsNotEmpty()
-  password: string
+  readonly password: string
 }
 
 export class UpdateUserDto {
   @IsString()
   @IsOptional()
-  full_name: string
+  readonly full_name: string
 
   @IsEmail()
   @IsOptional()
-  email: string
+  readonly email: string
 
   @IsString()
   @IsOptional()
-  password: string
+  readonly password: string
 }
 
 export class ExistingUsersDto {
   @IsEmail()
   @IsNotEmpty()
-  email: string
+  readonly email: string
 }
 
 export class GetUserDataDto {
   @IsEmail()
   @IsNotEmpty()
-  email: string
+  readonly email: string
 
   @IsString()
   @IsNotEmpty()
-  password: string
+  readonly password: string
 
   @IsString()
   @IsNotEmpty()
-  full_name: string
+  readonly full_name: string
 
   @IsNumber()
   @IsNotEmpty()
-  created_at: number
+  readonly created_at: number
 }

@@ -18,8 +18,4 @@ export class UrlUpdateDto {
   @IsString()
   @IsNotEmpty()
   readonly url: string
-
-  @IsString()
-  @IsOptional()
-  readonly slug: string
 }
