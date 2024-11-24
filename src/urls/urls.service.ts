@@ -37,20 +37,13 @@ export class UrlsService {
         throw new Error('Slug already exists')
       }
 
-      const urlPattern = /^https?:\/\//
-      let completeUrl = url.trim()
-
-      if (!urlPattern.test(completeUrl)) {
-        completeUrl = `https://${completeUrl}`
-      }
-
       const shortenedSlug = uuidv4().slice(0, 7)
 
       const urlRecord = await this.prisma.url.create({
         data: {
-          url: completeUrl,
+          url: url,
           slug: shortenedSlug,
-          userId
+          userId: userId
         }
       })
 

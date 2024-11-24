@@ -10,7 +10,7 @@ export class UrlsController {
 
   constructor(private readonly urlsService: UrlsService) {}
 
-  @Post('slug')
+  @Post('create-slug')
   @ApiOperation({ summary: 'Shorten URL' })
   @ApiBody({ type: UrlDto })
   @ApiBearerAuth()
