@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Get, Body, Query } from '@nestjs/common'
+import { Controller, Post, Get, Body, Query, Res } from '@nestjs/common'
 import { UrlsService } from './urls.service'
 import { UrlDto } from 'src/dto/urls.dto'
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
@@ -36,11 +36,11 @@ export class UrlsController {
   @ApiBearerAuth()
   @ApiResponse({ status: 302, description: 'Redirect to the original URL.' })
   @ApiResponse({ status: 404, description: 'Not found. The slug does not exist.' })
-  async redirectSlug(@Query('slug') slug: string) {
+  async redirectSlug(@Query('slug') slug: string, @Res() res) {
     try {
       const getUrl = await this.urlsService.redirectSlug(slug)
 
-      return Response.redirect(getUrl)
+      return res.status(302).redirect(getUrl)
     }
 
     catch (error) {
