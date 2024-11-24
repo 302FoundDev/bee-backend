@@ -2,7 +2,7 @@
 import { Controller, Body, Post, Get, HttpException, HttpStatus, Request, Param } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { CreateUserDto, LoginUserDto } from 'src/dto/users.dto'
+import { CreateUserDto } from 'src/dto/users.dto'
 
 
 @Controller('users')
@@ -30,25 +30,6 @@ export class UsersController {
     }
   }
 
-  @Post('login')
-  @ApiOperation({ summary: 'Login as an existing user' })
-  @ApiBody({ type: LoginUserDto })
-  @ApiBearerAuth()
-  @ApiResponse({ status: 400, description: 'Bad request. Please check your information.' })
-  @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to access user data.' })
-  @ApiResponse({ status: 404, description: 'Not found. User not found.' })
-  @ApiResponse({ status: 200, description: 'User retrieved successfully. Response contains user data.' })
-  async login(@Body() loginUserDto: LoginUserDto) {
-    try {
-      const login = await this.userService.login(loginUserDto)
-
-      return { status: 'success', message: 'User logged in successfully', data: login }
-    }
-    catch (error) {
-      throw new HttpException({ status: 'error', message: error.message }, HttpStatus.UNAUTHORIZED)
-    }
-  }
-
   @Get('get-user-data')
   @ApiOperation({ summary: 'Get user data' })
   @ApiQuery({ name: 'id', type: Number })
@@ -72,6 +53,8 @@ export class UsersController {
       throw new HttpException({ status: 'error', message: error.message }, HttpStatus.UNAUTHORIZED)
     }
   }
+
+
 
 }
 

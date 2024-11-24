@@ -1,19 +1,52 @@
 import { Injectable } from '@nestjs/common'
-import { LoginDto } from 'src/dto/login.dto'
+import * as bcrypt from 'bcrypt'
+import { LoginUserDto } from 'src/dto/login.dto'
+import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
 export class AuthService {
 
-  async validateUser(username: string, password: string) {
-    if (username === 'admin' && password === 'admin') {
-      return { username: 'admin' };
-    }
-    return null;
+  constructor(private readonly prisma: PrismaService) {}
+
+  async validateUser(email: string, password: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: email }
+    })
+
+    if (!user) return false
+
+    const passwordMatch = await bcrypt.compare(password, user.password)
+
+    if (!passwordMatch) return false
+
+    return true
   }
 
-  async login(loginDto: LoginDto) {
-    return {
-      access_token: 'token',
+  async login(loginUserDto: LoginUserDto) {
+  
+      try {
+        const secret = process.env.JWT_SECRET_KEY!
+        
+        const { email, password } = loginUserDto
+  
+        const checkCredentials = await this.validateUser(email, password)
+  
+        if (!checkCredentials) throw ('Invalid credentials')
+  
+        const user = await this.prisma.user.findUnique({
+          where: { email }
+        })
+  
+        const passwordMatch = await bcrypt.compare(password, user.password)
+  
+        if (!passwordMatch) throw ('Invalid password')
+  
+        return user
+      }
+  
+      catch (error) {
+        throw new Error(`Error logging in: ${error}`)
+      }
+  
     }
-  }
 }

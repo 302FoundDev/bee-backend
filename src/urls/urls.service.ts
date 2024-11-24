@@ -8,13 +8,13 @@ import { UrlDto } from 'src/dto/urls.dto'
 export class UrlsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async existingSlug(slug: string, ownerId: number): Promise<boolean> {
+  async existingSlug(slug: string, userId: number): Promise<boolean> {
 
     try {
       const url = await this.prisma.url.findFirst({
         where: { 
           slug,
-          userId: ownerId
+          userId
          }
       })
 
@@ -27,10 +27,10 @@ export class UrlsService {
 
   }
 
-  async slug(urlDto: UrlDto) {
+  async slug(urlDto: UrlDto, userId: number) {
     
     try {
-      const { url, slug, userId } = urlDto
+      const { url, slug } = urlDto
       const existingSlug = await this.existingSlug(slug, userId)
 
       if (existingSlug) {

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Get, Body, Param, Res, UseGuards } from '@nestjs/common'
+import { Controller, Post, Get, Body, Param, Res, UseGuards, Req } from '@nestjs/common'
 import { UrlsService } from './urls.service'
 import { AuthGuard } from 'src/guards/auth.guard'
 import { UrlDto } from 'src/dto/urls.dto'
@@ -20,9 +20,11 @@ export class UrlsController {
   @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to access user data.' })
   @ApiResponse({ status: 404, description: 'Not found. SLUG not found.' })
   @ApiResponse({ status: 200, description: 'URL shortened successfully.' })
-  async slug(@Body() urlDto: UrlDto) {
+  async slug(@Body() urlDto: UrlDto, @Req() req) {
     try {
-      const slug = await this.urlsService.slug(urlDto)
+      const userId = req.user.id
+
+      const slug = await this.urlsService.slug(urlDto, userId)
 
       return { status: 'success', message: 'url shortened successfully', data: slug }
     }
