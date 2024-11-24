@@ -1,16 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'
+import { LoginDto } from 'src/dto/login.dto'
 
 @Injectable()
 export class AuthService {
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(username: string, password: string) {
     if (username === 'admin' && password === 'admin') {
       return { username: 'admin' };
     }
     return null;
   }
 
-  async login(user: any) {
+  async login(loginDto: LoginDto) {
     return {
       access_token: 'token',
     }

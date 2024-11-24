@@ -96,10 +96,11 @@ export class UsersService {
 
   }
 
-  async getUserData(email: string): Promise<User | null> {
+  async getUserData(id: number) {
     try {
-      const user = await this.prisma.user.findUnique({
-        where: { email },
+      const user = await this.prisma.user.findMany({
+        where: { id },
+        include: { urls: true }
       })
 
       if (!user) {
@@ -107,7 +108,7 @@ export class UsersService {
         throw new Error('User not found')
       }
 
-      return user
+      return user[0]
     } catch (error) {
       console.error(`Error obteniendo usuario: ${error.message}`)
       throw new Error(`Error getting user: ${error.message}`)

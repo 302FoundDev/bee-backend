@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Body, Post, Get, HttpException, HttpStatus, Query } from '@nestjs/common'
+import { Controller, Body, Post, Get, HttpException, HttpStatus, Request, Param } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CreateUserDto, LoginUserDto } from 'src/dto/users.dto'
@@ -51,15 +51,20 @@ export class UsersController {
 
   @Get('get-user-data')
   @ApiOperation({ summary: 'Get user data' })
-  @ApiQuery({ name: 'email', type: String })
+  @ApiQuery({ name: 'id', type: Number })
   @ApiBearerAuth()
   @ApiResponse({ status: 400, description: 'Bad request. Please check your information.' })
   @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to access user data.' })
   @ApiResponse({ status: 404, description: 'Not found. User not found.' })
   @ApiResponse({ status: 200, description: 'User retrieved successfully. Response contains user data.' })
-  async getUserData(@Query('email') email: string) {
+  async getUserData(@Request() req: any, @Param('id') id: number) {
     try {
-      const userData = await this.userService.getUserData(email)
+      // This line is commented out because we tested the endpoint with Swagger UI
+      // Uncomment this line when testing with Swagger UI is complete
+
+      //const { id } = req.user.id
+
+      const userData = await this.userService.getUserData(id)
 
       return { status: 'success', message: 'User data retrieved successfully', data: userData }
     }
@@ -69,3 +74,4 @@ export class UsersController {
   }
 
 }
+
