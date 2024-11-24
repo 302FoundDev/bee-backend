@@ -41,7 +41,7 @@ export class UrlsService {
       let completeUrl = url.trim()
 
       if (!urlPattern.test(completeUrl)) {
-        completeUrl = `http://${completeUrl}`
+        completeUrl = `https://${completeUrl}`
       }
 
       const shortenedSlug = uuidv4().slice(0, 7)

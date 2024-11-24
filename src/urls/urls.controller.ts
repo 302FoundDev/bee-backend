@@ -16,8 +16,8 @@ export class UrlsController {
   @ApiBearerAuth()
   @ApiResponse({ status: 400, description: 'Bad request. Please check your information.' })
   @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to access user data.' })
-  @ApiResponse({ status: 404, description: 'Not found. User not found.' })
-  @ApiResponse({ status: 200, description: 'User retrieved successfully. Response contains user data.' })
+  @ApiResponse({ status: 404, description: 'Not found. SLUG not found.' })
+  @ApiResponse({ status: 200, description: 'URL shortened successfully.' })
   async slug(@Body() urlDto: UrlDto) {
     try {
       const slug = await this.urlsService.slug(urlDto)
@@ -30,19 +30,17 @@ export class UrlsController {
     }
   }
 
-  @Get('get-slug')
+  @Get(':slug')
   @ApiOperation({ summary: 'Get selected slugs' })
   @ApiQuery({ name: 'slug', type: String })
   @ApiBearerAuth()
-  @ApiResponse({ status: 400, description: 'Bad request. Please check your information.' })
-  @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to access user data.' })
-  @ApiResponse({ status: 404, description: 'Not found. User not found.' })
-  @ApiResponse({ status: 200, description: 'User retrieved successfully. Response contains user data.' })
-  async getSlug(@Query('slug') slug: string) {
+  @ApiResponse({ status: 302, description: 'Redirect to the original URL.' })
+  @ApiResponse({ status: 404, description: 'Not found. The slug does not exist.' })
+  async redirectSlug(@Query('slug') slug: string) {
     try {
-      const getSlug = await this.urlsService.redirectSlug(slug)
+      const getUrl = await this.urlsService.redirectSlug(slug)
 
-      return { status: 'success', message: 'all slugs retrieved successfull', data: getSlug }
+      return Response.redirect(getUrl)
     }
 
     catch (error) {
