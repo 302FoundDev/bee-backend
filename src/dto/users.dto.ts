@@ -14,16 +14,6 @@ export class CreateUserDto {
   readonly password: string
 }
 
-export class LoginUserDto {
-  @IsEmail()
-  @IsNotEmpty()
-  readonly email: string
-
-  @IsString()
-  @IsNotEmpty()
-  readonly password: string
-}
-
 export class UpdateUserDto {
   @IsString()
   @IsOptional()
