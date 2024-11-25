@@ -101,4 +101,17 @@ export class UsersService {
     }
   }
 
+  async deleteUser(id: number) {
+    try {
+      const user = await this.prisma.user.delete({
+        where: { id }
+      })
+
+      return { status: 'success', message: 'User deleted successfully', data: user }
+    } catch (error) {
+      console.error(`Error deleting user: ${error.message}`)
+      throw new Error(`Error deleting user: ${error.message}`)
+    }
+  }
+
 }
