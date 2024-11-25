@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common'
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
 import { LoginUserDto } from 'src/dto/login.dto'
@@ -10,6 +10,10 @@ export class AuthService {
   constructor(private readonly prisma: PrismaService, private readonly jwtService: JwtService) {}
 
   async validateUser(email: string, password: string) {
+    if (!email) {
+      throw new BadRequestException('Email must be provided');
+    }
+
     const user = await this.prisma.user.findUnique({
       where: { email }
     })

@@ -11,10 +11,10 @@ async function bootstrap() {
   })
 
   const config = new DocumentBuilder()
-    .setTitle('Bee')
+    .setTitle('bee')
     .setDescription('The Bee API description')
     .setVersion('1.0')
-    .addTag('👨‍💻 Users')
+    .addTag('bee')
     .build()
   
   const documentFactory = SwaggerModule.createDocument(app, config)
