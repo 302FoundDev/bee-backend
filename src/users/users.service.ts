@@ -54,20 +54,6 @@ export class UsersService {
 
   }
 
-  async findUserById(id: number) {
-    try {
-      const user = await this.prisma.user.findUnique({
-        where: { id }
-      })
-
-      return user
-    }
-
-    catch (error) {
-      throw new Error(`Error finding user: ${error}`)
-    }
-  }
-
   async getUserData(id: number) {
     try {
       const user = await this.prisma.user.findMany({
