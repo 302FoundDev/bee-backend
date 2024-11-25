@@ -37,7 +37,7 @@ export class UsersController {
   @ApiQuery({ name: 'id', type: Number })
   @ApiBearerAuth()
   @ApiResponse({ status: 400, description: 'Bad request. Please check your information.' })
-  @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to access user data.' })
+  @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to find user.' })
   @ApiResponse({ status: 404, description: 'Not found. User not found.' })
   @ApiResponse({ status: 200, description: 'User retrieved successfully. Response contains user data.' })
   async findUserById(@Req() req: any) {

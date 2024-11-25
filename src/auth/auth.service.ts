@@ -9,7 +9,7 @@ export class AuthService {
 
   constructor(private readonly prisma: PrismaService, private readonly jwtService: JwtService) {}
 
-  async checkCredentials(email: string, password: string) {
+  async validateUser(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
       where: { email}
     })
@@ -25,7 +25,7 @@ export class AuthService {
       try {
         const { email, password } = loginUserDto
   
-        const user = await this.checkCredentials(email, password)
+        const user = await this.validateUser(email, password)
   
         if (!user) throw new UnauthorizedException('Invalid credentials')
   
