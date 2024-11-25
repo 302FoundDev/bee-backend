@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Get, Body, Param, Res, UseGuards, Req } from '@nestjs/common'
+import { Controller, Post, Get, Body, Param, Res, UseGuards, Req, Put } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
 import { UrlsService } from './urls.service'
-import { AuthGuard } from 'src/guards/auth.guard'
 import { UrlDto } from 'src/dto/urls.dto'
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
 
@@ -31,6 +31,29 @@ export class UrlsController {
 
     catch (error) {
       throw new Error(`Error shortening URL: ${error}`)
+    }
+  }
+
+  @Put('delete-slug/:slug')
+    @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete selected slug' })
+  @ApiQuery({ name: 'slug', type: String })
+  @ApiResponse({ status: 400, description: 'Bad request. Please check your information.' })
+  @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to access user data.' })
+  @ApiResponse({ status: 404, description: 'Not found. SLUG not found.' })
+  @ApiResponse({ status: 200, description: 'URL deleted successfully.' })
+  async deleteSlug(@Param('slug') slug: string, @Req() req) {
+    try {
+      const userId = req.user.id
+
+      await this.urlsService.deleteSlug(slug, userId)
+
+      return { status: 'success', message: 'url deleted successfully' }
+    }
+
+    catch (error) {
+      throw new Error(`Error deleting URL: ${error}`)
     }
   }
 

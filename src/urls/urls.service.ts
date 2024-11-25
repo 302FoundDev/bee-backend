@@ -56,6 +56,25 @@ export class UrlsService {
 
   }
 
+  async deleteSlug(slug: string, userId: number) {
+
+    try {
+      const urlRecord = await this.prisma.url.delete({
+        where: {
+          slug,
+          userId
+        }
+      })
+
+      return urlRecord
+    }
+
+    catch (error) {
+      throw new Error(`Error deleting URL: ${error}`)
+    }
+
+  }
+
   async redirectSlug(nSlug: string) {
 
     try {
