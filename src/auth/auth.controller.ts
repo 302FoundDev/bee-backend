@@ -1,4 +1,4 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common'
+import { Body, Controller, HttpException, HttpStatus, Post, Res } from '@nestjs/common'
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from 'src/dto/login.dto';
@@ -17,9 +17,16 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to login.' })
   @ApiResponse({ status: 404, description: 'Not found. User not found.' })
   @ApiResponse({ status: 200, description: 'User login successfully.' })
-  async login(@Body() loginUserDto: LoginUserDto) {
+  async login(@Body() loginUserDto: LoginUserDto, @Res() response) {
     try {
       const login = await this.authService.login(loginUserDto)
+
+      response.cookie('access_token', login.access_token, { 
+        httpOnly: true, 
+        maxAge: 86400000,
+        secure: process.env.NODE_ENV === 'development' ? false : true, 
+        sameSite: 'Strict',
+      })
 
       return { status: 'success', message: 'User logged in successfully', data: login }
     }
@@ -29,3 +36,4 @@ export class AuthController {
   }
 
 }
+

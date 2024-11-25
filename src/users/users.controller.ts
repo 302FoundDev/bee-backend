@@ -32,7 +32,7 @@ export class UsersController {
   }
 
   @Get('find-user-by-id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Find user' })
   @ApiQuery({ name: 'id', type: Number })
   @ApiBearerAuth()
@@ -54,6 +54,7 @@ export class UsersController {
   }
 
   @Get('get-user-data')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Get user data' })
   @ApiQuery({ name: 'id', type: Number })
   @ApiBearerAuth()

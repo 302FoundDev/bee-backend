@@ -12,7 +12,7 @@ export class UrlsController {
   constructor(private readonly urlsService: UrlsService) {}
 
   @Post('create-slug')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Shorten URL' })
   @ApiBody({ type: UrlDto })
   @ApiBearerAuth()
@@ -35,7 +35,7 @@ export class UrlsController {
   }
 
   @Put('delete-slug/:slug')
-    @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete selected slug' })
   @ApiQuery({ name: 'slug', type: String })
