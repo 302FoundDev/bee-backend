@@ -57,13 +57,13 @@ export class UrlsController {
     }
   }
 
-  @Get('get-slugs')
-  @ApiOperation({ summary: 'Get selected slugs' })
+  @Get(':slug')
+  @ApiOperation({ summary: 'Redirect slug to original' })
   @ApiQuery({ name: 'slug', type: String })
   @ApiBearerAuth()
   @ApiResponse({ status: 302, description: 'Redirect to the original URL.' })
   @ApiResponse({ status: 404, description: 'Not found. The slug does not exist.' })
-  async redirectSlug(slug: string, @Res() res) {
+  async redirectSlug(@Param('slug') slug: string, @Res() res) {
     try {
       const getUrl = await this.urlsService.redirectSlug(slug)
 
