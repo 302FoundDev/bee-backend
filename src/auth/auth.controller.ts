@@ -35,5 +35,19 @@ export class AuthController {
     }
   }
 
-}
+  @Post('logout')
+  @ApiOperation({ summary: 'Logout as an existing user' })
+  @ApiBearerAuth()
+  @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to logout.' })
+  @ApiResponse({ status: 200, description: 'User logout successfully.' })
+  async logout(@Res() response) {
+    try {
+      response.clearCookie('access_token')
+      return { status: 'success', message: 'User logged out successfully' }
+    }
+    catch (error) {
+      throw new HttpException({ status: 'error', message: error.message }, HttpStatus.UNAUTHORIZED)
+    }
+  }
 
+}
