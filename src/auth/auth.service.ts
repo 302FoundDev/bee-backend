@@ -30,10 +30,9 @@ export class AuthService {
         if (!user) throw new UnauthorizedException('Invalid credentials')
   
         const payload = { email: user.email, id: user.id }
-        const access_token = this.jwtService.sign(payload)
 
         return {
-          access_token: access_token
+          access_token: this.jwtService.sign(payload)
         }
       }
   
