@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common'
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
-import { LoginUserDto } from 'src/dto/login.dto'
 import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
@@ -24,10 +23,9 @@ export class AuthService {
     return passwordMatch ? user : null
   }
 
-  async login(loginUserDto: LoginUserDto) {
+  async login(email, password) {
   
       try {
-        const { email, password } = loginUserDto
   
         const user = await this.validateUser(email, password)
   
