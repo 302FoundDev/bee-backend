@@ -44,7 +44,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'User retrieved successfully. Response contains user data.' })
   async getUserData(@Req() req: any) {
     try {
-      const { id } = req.user.id
+      const { id }: { id: number } = req.user.id
 
       const userData = await this.userService.getUserData(id)
 
