@@ -23,7 +23,7 @@ export class AuthService {
     return passwordMatch ? user : null
   }
 
-  async login(email, password) {
+  async login(email: string, password: string) {
   
       try {
   

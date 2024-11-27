@@ -21,7 +21,9 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'User retrieved successfully. Response contains user data.' })
   async register(@Body() createUserDto: CreateUserDto) {
     try {
-      const register = await this.userService.register(createUserDto)
+      const { full_name, email, password } = createUserDto
+
+      const register = await this.userService.register(full_name, email, password)
 
       return { status: 'success', message: 'User registered successfully', data: register }
     }
