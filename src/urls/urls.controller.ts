@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Post, Get, Body, Param, Res, UseGuards, Req, Put, Delete } from '@nestjs/common'
+import { Controller, Post, Get, Body, Param, Res, UseGuards, Req, Delete } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { UrlsService } from './urls.service'
 import { UrlDto } from 'src/dto/urls.dto'

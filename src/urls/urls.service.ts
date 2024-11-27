@@ -30,7 +30,7 @@ export class UrlsService {
   async slug(urlDto: UrlDto, userId: number) {
     
     try {
-      const { url, slug } = urlDto
+      const { url, slug, description } = urlDto
       const existingSlug = await this.existingSlug(slug, userId)
 
       if (existingSlug) {
@@ -43,6 +43,7 @@ export class UrlsService {
         data: {
           url: url,
           slug: shortenedSlug,
+          description: description,
           userId: userId
         }
       })

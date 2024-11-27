@@ -8,19 +8,20 @@ datasource db {
 }
 
 model User {
-  id  Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   full_name String
-  email String  @unique
+  email     String   @unique
   password  String
-  urls  Url[]
+  urls      Url[]
   createdAt DateTime @default(now())
 }
 
 model Url {
-  id  Int @id @default(autoincrement())
-  url String
-  slug  String  @unique
-  userId  Int
-  user  User  @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  url         String
+  slug        String   @unique
+  description String   @default("")
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
 }

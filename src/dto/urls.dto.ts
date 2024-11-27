@@ -9,8 +9,12 @@ export class UrlDto {
   @IsOptional()
   readonly slug: string
 
+  @IsString()
+  @IsNotEmpty()
+  readonly description: string
+
   @IsNumber()
-  @IsOptional()
+  @IsNotEmpty()
   readonly userId: number
 }
 
