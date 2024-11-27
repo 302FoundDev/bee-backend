@@ -1,5 +1,6 @@
 import { Body, Controller, HttpException, HttpStatus, Post, Res } from '@nestjs/common'
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from 'src/dto/login.dto';
 
@@ -16,17 +17,17 @@ export class AuthController {
   @ApiResponse({ status: 404, description: 'Not found. User not found.' })
   @ApiResponse({ status: 200, description: 'User login successfully.' })
   @ApiResponse({ status: 400, description: 'Bad request. Please check your information.' })
-  async login(@Body() loginUserDto: LoginUserDto, @Res() response) {
+  async login(@Body() loginUserDto: LoginUserDto, @Res({ passthrough: true }) res: Response) {
     try {
       const { email, password } = loginUserDto
 
       const user = await this.authService.login(email, password)
 
-      response.cookie('access_token', user.access_token, { 
+      res.cookie('access_token', user.access_token, { 
         httpOnly: true, 
         maxAge: 86400000,
         secure: process.env.NODE_ENV === 'development' ? false : true, 
-        sameSite: 'Strict',
+        sameSite: 'strict',
       })
 
       return { status: 'success', message: 'User logged in successfully', user: user }
@@ -41,9 +42,9 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to logout.' })
   @ApiResponse({ status: 200, description: 'User logout successfully.' })
-  async logout(@Res() response) {
+  async logout(@Res() res: Response) {
     try {
-      response.clearCookie('access_token')
+      res.clearCookie('access_token')
       return { status: 'success', message: 'User logged out successfully' }
     }
     catch (error) {

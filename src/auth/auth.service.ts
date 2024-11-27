@@ -27,14 +27,21 @@ export class AuthService {
   
       try {
   
-        const user = await this.validateUser(email, password)
+        const validateUser = await this.validateUser(email, password)
   
-        if (!user) throw new UnauthorizedException('Invalid credentials')
+        if (!validateUser) throw new UnauthorizedException('Invalid credentials')
+
+        console.log("validateUser", validateUser)
+        const user = await this.prisma.user.findUnique({
+          where: { email }
+        })
   
         const payload = { email: user.email, id: user.id }
 
+        const token = this.jwtService.sign(payload)
+
         return {
-          access_token: this.jwtService.sign(payload)
+          access_token: token
         }
       }
   
