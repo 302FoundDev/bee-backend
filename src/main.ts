@@ -26,6 +26,7 @@ async function bootstrap() {
     .setDescription('The Bee API description')
     .setVersion('1.0')
     .addTag('bee')
+    .addCookieAuth('access_token')
     .build();
 
   const documentFactory = SwaggerModule.createDocument(app, config);
