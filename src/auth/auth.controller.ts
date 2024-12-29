@@ -32,7 +32,7 @@ export class AuthController {
         httpOnly: true,
         maxAge: 7200000,
         secure: process.env.NODE_ENV === 'production' ? true : false,
-        sameSite: 'none',
+        sameSite: 'strict',
       }).json({ status: 'success', message: 'User logged in successfully' })
 
     }
@@ -53,7 +53,7 @@ export class AuthController {
       res.clearCookie('access_token', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production' ? true : false,
-        sameSite: 'none',
+        sameSite: 'strict',
       });
 
       return res.status(200).json({
