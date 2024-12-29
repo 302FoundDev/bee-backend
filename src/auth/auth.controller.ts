@@ -28,7 +28,7 @@ export class AuthController {
         throw new HttpException({ status: 'error', message: 'User not found' }, HttpStatus.NOT_FOUND)
       }
 
-      return res.cookie('access_token', user.access_token, {
+      res.cookie('access_token', user.access_token, {
         httpOnly: true,
         maxAge: 7200000,
         secure: process.env.NODE_ENV === 'production' ? true : false,
