@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -26,9 +27,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, documentFactory);
 
   const port = process.env.PORT || 5000;
-  await app.listen(port, () => {
-    console.log(`Application is running on: http://localhost:${port}`);
-  });
+  await app.listen(port);
 }
 
 bootstrap();
