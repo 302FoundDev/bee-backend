@@ -11,7 +11,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    origin: ['https://beeslug.vercel.app', 'https://www.beeslug.vercel.app', 'http://localhost:5173'],
+    origin: ['https://beeslug.vercel.app', 'http://localhost:5173'],
     credentials: true,
   });
 
