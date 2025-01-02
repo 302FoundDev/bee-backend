@@ -33,7 +33,7 @@ export class AuthController {
         maxAge: 7200000,
         secure: true,
         sameSite: 'none',
-      }).json({ status: 'success', message: 'User logged in successfully' })
+      }).json({ status: 'success', message: 'User logged in successfully', user: user })
 
     }
 
