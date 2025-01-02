@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Controller, Post, Get, Body, Param, Res, UseGuards, Req, Delete } from '@nestjs/common'
 import { UrlsService } from './urls.service'
-import { UrlDto, SlugDeleteDto } from 'src/dto/urls.dto'
+import { UrlDto } from 'src/dto/urls.dto'
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard'
 
@@ -38,7 +38,7 @@ export class UrlsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete selected slug' })
-  @ApiBody({ type: SlugDeleteDto })
+  @ApiQuery({ name: 'slug', type: String })
   @ApiResponse({ status: 400, description: 'Bad request. Please check your information.' })
   @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to access user data.' })
   @ApiResponse({ status: 404, description: 'Not found. SLUG not found.' })
@@ -48,13 +48,6 @@ export class UrlsController {
       const userId = req.user.sub
 
       const deleteSlug = await this.urlsService.deleteSlug(slug, userId)
-
-      if (!deleteSlug) {
-        return {
-          status: 'error',
-          message: 'Slug not found or already deleted',
-        }
-      }
 
       return {
         status: 'success',
