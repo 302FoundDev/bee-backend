@@ -8,7 +8,6 @@ export class UrlsService {
   constructor(private readonly prisma: PrismaService) { }
 
   async existingSlug(slug: string, userId: number): Promise<boolean> {
-
     try {
       const url = await this.prisma.url.findFirst({
         where: {
@@ -23,11 +22,9 @@ export class UrlsService {
     catch (error) {
       throw new Error(`Error checking slug existence: ${error}`)
     }
-
   }
 
   async slug(urlDto: UrlDto, userId: number) {
-
     try {
       const { url, slug, description } = urlDto
       const existingSlug = await this.existingSlug(slug, userId)
@@ -51,18 +48,20 @@ export class UrlsService {
     catch (error) {
       throw new Error(`Error shortening URL: ${error}`)
     }
-
   }
 
   async deleteSlug(slug: string, userId: number) {
-
     try {
       const urlRecord = await this.prisma.url.delete({
         where: {
-          slug,
-          userId
+          slug: slug,
+          userId: userId
         }
       })
+
+      if (!urlRecord) {
+        throw new Error('Slug does not exist')
+      }
 
       return urlRecord
     }
@@ -70,11 +69,9 @@ export class UrlsService {
     catch (error) {
       throw new Error(`Error deleting URL: ${error}`)
     }
-
   }
 
   async redirectSlug(nSlug: string) {
-
     try {
       const urlRecord = await this.prisma.url.findFirst({
         where: { slug: nSlug }
@@ -90,7 +87,6 @@ export class UrlsService {
     catch (error) {
       throw new Error(`Error fetching URLs: ${error}`)
     }
-
   }
 
 }

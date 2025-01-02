@@ -34,7 +34,7 @@ export class UrlsController {
     }
   }
 
-  @Delete('delete-slug')
+  @Delete('delete-slug/:slug')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete selected slug' })
@@ -43,19 +43,29 @@ export class UrlsController {
   @ApiResponse({ status: 401, description: 'Unauthorized. User not authorized to access user data.' })
   @ApiResponse({ status: 404, description: 'Not found. SLUG not found.' })
   @ApiResponse({ status: 200, description: 'URL deleted successfully.' })
-  async deleteSlug(@Body() body: SlugDeleteDto, @Req() req) {
+  async deleteSlug(@Param('slug') slug: string, @Req() req) {
     try {
       const userId = req.user.sub
 
-      const { slug } = body
-
       const deleteSlug = await this.urlsService.deleteSlug(slug, userId)
 
-      return { status: 'success', message: 'url deleted successfully', data: deleteSlug }
+      if (!deleteSlug) {
+        return {
+          status: 'error',
+          message: 'Slug not found or already deleted',
+        }
+      }
+
+      return {
+        status: 'success',
+        message: 'Slug deleted successfully',
+        data: deleteSlug
+      }
     }
 
     catch (error) {
-      throw new Error(`Error deleting URL: ${error}`)
+      console.error('Error deleting slug:', error);
+      throw new Error(`Error deleting URL: ${error.message}`);
     }
   }
 
