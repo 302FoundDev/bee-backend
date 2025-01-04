@@ -59,7 +59,7 @@ export class UrlsService {
         }
       })
 
-      if (urlRecord) {
+      if (!urlRecord) {
         throw new Error('Slug does not exist')
       }
 
