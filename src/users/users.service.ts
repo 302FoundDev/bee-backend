@@ -59,23 +59,30 @@ export class UsersService {
     try {
       const user = await this.prisma.user.findUnique({
         where: { id },
-        include: { urls: true }
-      })
+        include: {
+          urls: {
+            orderBy: {
+              createdAt: 'desc',  // Ordena las URLs por el campo `createdAt` de manera descendente
+            },
+          },
+        },
+      });
 
       if (!user) {
-        throw new Error('User not found')
+        throw new Error('User not found');
       }
 
-      const { password, ...userData } = user
-      const { urls } = userData
+      const { password, ...userData } = user;
+      const { urls } = userData;
 
-      return { ...userData, urls }
+      return { ...userData, urls };
 
     } catch (error) {
-      console.error(`Error getting user: ${error.message}`)
-      throw new Error(`Error getting user: ${error.message}`)
+      console.error(`Error getting user data for user ID ${id}: ${error.message}`);
+      throw new Error(`Error getting user data: ${error.message}`);
     }
   }
+
 
   async updateUser(id: number, data: UpdateUserDto) {
     try {
@@ -87,7 +94,7 @@ export class UsersService {
         }
       })
 
-      const { password, createdAt, ...userData } = user
+      const { password, ...userData } = user
 
       return userData
     }
