@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "postinstall": "npx prisma generate",
     "prisma:generate": "npx prisma generate",
-    "vercel-build": "npm run build && npx prisma generate"
+    "vercel-build": "npm run build && npx prisma:generate"
   },
   "dependencies": {
     "@nestjs/common": "^10.4.12",

@@ -8,7 +8,7 @@ import * as cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(cookieParser('access_token'));
+  app.use(cookieParser());
 
   app.enableCors({
     origin: ['https://beeslug.vercel.app', 'http://localhost:5173'],
