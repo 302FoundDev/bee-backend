@@ -43,7 +43,6 @@ export class AuthService {
       const payload = { username: user.email, sub: user.id }
 
       const access_token = await this.jwtService.signAsync(payload, {
-        secret: process.env.SECRET_KEY,
         expiresIn: '2h'
       })
 
