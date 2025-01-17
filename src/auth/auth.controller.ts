@@ -32,7 +32,7 @@ export class AuthController {
         httpOnly: true,
         maxAge: 7200000,
         secure: true,
-        sameSite: 'none',
+        sameSite: 'strict',
       }).json({ status: 'success', message: 'User logged in successfully', user: user })
 
     }
@@ -53,7 +53,7 @@ export class AuthController {
       res.clearCookie('access_token', {
         httpOnly: true,
         secure: true,
-        sameSite: 'none',
+        sameSite: 'strict',
       }).status(200).json({
         status: 'success',
         message: 'User logged out successfully',

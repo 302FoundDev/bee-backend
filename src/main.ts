@@ -2,18 +2,26 @@
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import cookieParser from 'cookie-parser';
+import { API_CORS_ORIGIN } from './env.config';
 
+process.loadEnvFile();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(cookieParser());
-
+  const allowedOrigins = API_CORS_ORIGIN.split(',')
   app.enableCors({
-    origin: ['https://beeslug.vercel.app', 'http://localhost:5173'],
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'))
+      }
+    },
+    methods: 'GET, POST, PUT, PATCH, DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
-  });
+  })
 
   const config = new DocumentBuilder()
     .setTitle('bee')
