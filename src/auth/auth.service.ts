@@ -40,14 +40,12 @@ export class AuthService {
         where: { email }
       })
 
-      const payload = { username: user.email, sub: user.id }
+      const payload = { user: user.email, sub: user.id }
 
-      const access_token = await this.jwtService.signAsync(payload, {
-        expiresIn: '2h'
-      })
+      const access_token = await this.jwtService.sign(payload)
 
       return {
-        access_token: access_token
+        access_token
       }
     }
 

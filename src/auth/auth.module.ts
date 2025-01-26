@@ -5,14 +5,13 @@ import { AuthService } from './auth.service'
 import { PrismaService } from 'src/prisma.service'
 import { AuthController } from './auth.controller'
 import { UsersModule } from 'src/users/users.module'
-import { SECRET_KEY } from 'src/env.config'
 
 @Module({
   imports: [
     UsersModule,
     JwtModule.register({
       global: true,
-      secret: SECRET_KEY,
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '2h' },
     }),
   ],

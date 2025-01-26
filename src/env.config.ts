@@ -6,5 +6,4 @@ export const {
 } = process.env;
 
 export const DATABASE_URL = process.env.DATABASE_URL;
-export const SECRET_KEY = process.env.SECRET_KEY;
 export const API_CORS_ORIGIN = process.env.API_CORS_ORIGIN;

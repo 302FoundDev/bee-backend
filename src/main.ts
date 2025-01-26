@@ -2,26 +2,17 @@
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { API_CORS_ORIGIN } from './env.config';
 
 process.loadEnvFile();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const allowedOrigins = API_CORS_ORIGIN.split(',')
+  const allowedOrigins = ['http://localhost:5173', 'https://bee.vercel.app', 'node'];
   app.enableCors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'))
-      }
-    },
-    methods: 'GET, POST, PUT, PATCH, DELETE',
-    allowedHeaders: 'Content-Type, Authorization',
+    origin: allowedOrigins,
     credentials: true,
-  })
+  });
 
   const config = new DocumentBuilder()
     .setTitle('bee')
