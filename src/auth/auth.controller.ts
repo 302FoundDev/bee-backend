@@ -52,8 +52,8 @@ export class AuthController {
     try {
       res.clearCookie('access_token', {
         httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
+        secure: false,
+        sameSite: 'none',
       }).status(200).json({
         status: 'success',
         message: 'User logged out successfully',
